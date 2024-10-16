@@ -1,17 +1,31 @@
 // CustomerOrder.java
 package com.example.demo.domain;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class CustomerOrder {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Generar ID automáticamente
     private Long id;
+
     private String customerEmail;
     private String customerAddress;
     private Date orderDate;
     private String deliveryStatus;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Payment> payments;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Discount> discounts;
 
     public CustomerOrder(Long id, String customerEmail, String customerAddress, Date orderDate, List<OrderItem> items) {
         this.id = id;
@@ -20,6 +34,8 @@ public class CustomerOrder {
         this.orderDate = orderDate;
         this.items = items;
     }
+
+    public CustomerOrder() {}
 
     public void addOrderItem(OrderItem item) {
         items.add(item);
@@ -82,5 +98,8 @@ public class CustomerOrder {
 
     public void setItems(List<OrderItem> items) {
         this.items = items;
+    }
+    public boolean isOrderValid() {
+        return customerEmail != null && !items.isEmpty();
     }
 }

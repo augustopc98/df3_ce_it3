@@ -1,10 +1,20 @@
 package com.example.demo.domain;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Entity
 public class Payment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private CustomerOrder order;
+
+
     private BigDecimal amount;
     private Date paymentDate;
     private String paymentStatus;
@@ -15,6 +25,8 @@ public class Payment {
         this.paymentDate = paymentDate;
         this.paymentStatus = paymentStatus;
     }
+
+    public Payment() {}
 
     public void processPayment() {
         // Aquí puedes añadir la lógica para procesar el pago

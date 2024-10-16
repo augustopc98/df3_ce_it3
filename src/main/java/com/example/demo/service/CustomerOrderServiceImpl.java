@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 @Service
 public class CustomerOrderServiceImpl implements CustomerOrderService {
@@ -24,7 +25,7 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     @Override
     public CustomerOrder getOrderById(Long orderId) {
-        return orderRepository.findById(orderId);
+        return orderRepository.findById(orderId).orElse(null);
     }
 
     @Override
@@ -34,17 +35,17 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     @Override
     public void updateOrder(CustomerOrder order) {
-        orderRepository.update(order);
+        orderRepository.save(order);
     }
 
     @Override
     public void cancelOrder(Long orderId) {
-        orderRepository.delete(orderId);
+        orderRepository.deleteById(orderId);
     }
 
     @Override
     public void processOrderPayment(Long orderId, Payment payment) {
-        CustomerOrder order = orderRepository.findById(orderId);
+        CustomerOrder order = orderRepository.findById(orderId).orElse(null);
         if(order != null && payment != null) {
             payment.processPayment();
         }
@@ -52,10 +53,10 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     @Override
     public void applyDiscountToOrder(Long orderId, Discount discount) {
-        CustomerOrder order = orderRepository.findById(orderId);
+        CustomerOrder order = orderRepository.findById(orderId).orElse(null);
         if(order != null) {
             BigDecimal discountedTotal = discount.applyDiscount(order.calculateTotal());
-            // logic to handle discount application
+            // lógica para manejar la aplicación del descuento
         }
     }
 }

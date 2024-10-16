@@ -1,13 +1,10 @@
-// CustomerOrderRepository.java
 package com.example.demo.repository;
 
 import com.example.demo.domain.CustomerOrder;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
-public interface CustomerOrderRepository {
-    void save(CustomerOrder order);
-    CustomerOrder findById(Long orderId);
+public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
     List<CustomerOrder> findByCustomerEmail(String email);
-    void delete(Long orderId);
-    void update(CustomerOrder order);
 }
